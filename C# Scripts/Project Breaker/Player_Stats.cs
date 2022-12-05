@@ -41,7 +41,7 @@ public class Player_Stats : MonoBehaviour
 
     public float[] classSpeeds = { 1.5f, 1.5f, 1.0f, 1.0f };
 
-    //TODO might be wise to make these private variables with getters and setters but that is cleanup
+
     public float dashSpeed = 15f;
     public float dashTime = 0.25f;
     public float dashcooldown;
@@ -123,7 +123,7 @@ public class Player_Stats : MonoBehaviour
 
     public void NetworkedRestart()
     {
-        //ask harry if we need to do anything to escape the death state
+        // Restart the scene for multiplayer
         anim.SetBool("isDead", false);
         ResetHealth();
         gameObject.transform.position = Player_Manager.Instance.startPos;
@@ -230,6 +230,8 @@ public class Player_Stats : MonoBehaviour
     }
 #endregion
 
+
+    //This is for handling collision with different objects
     private void OnTriggerEnter(Collider col)
     {
         Enemy_Stats dmg = col.gameObject.GetComponentInParent<Enemy_Stats>();

@@ -3,3 +3,6 @@ https://agentsam.itch.io/project-breaker
 
 CaRPG
 https://agentsam.itch.io/carpg
+
+Gaia's Grasp
+https://github.com/DovaNerd/Gaias_Grasp

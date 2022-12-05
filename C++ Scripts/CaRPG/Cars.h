@@ -26,11 +26,8 @@ public:
 	bool GetSabo();
 	void SetSabo();
 	void PlayCard(int,int);
-	/*
-	int GetAction1();
-	int GetAction2();
-	void SetAction(int);
-	*/
+
+	//Gameplay interactions
 	void IncreaseScore();
 	int GetScore();
 	void SetOppGear(int);
@@ -58,10 +55,8 @@ private:
 	bool Brake = false;
 	int Gear;
 	int Increment = 0;
-	/*
-	int Action1 = -1;
-	int Action2 = -1;
-	*/
+
+	//Gameplay related variables
 	int Turns = 0;
 	int Turns2 = 0;
 	int Position1 = -1;

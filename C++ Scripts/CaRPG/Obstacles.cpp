@@ -11,6 +11,7 @@ void Obstacles::Adddeck(int obs)
 	size = Deck.size();
 }
 
+// Draw a card from the obstacle deck
 void Obstacles::Draw()
 {
 	if (0 < Deck.size())
@@ -19,34 +20,6 @@ void Obstacles::Draw()
 		Deck.pop();
 		srand((unsigned)time(0));
 		Value = (rand() % 6 + 1);
-		/*
-		switch (Deck.at(Increment))
-		{
-		case 0:
-			printf("Apex turn Get higher than : ");
-			printf("%i", Value);
-			printf("\n");
-			printf("\n");
-			break;
-		case 1:
-			printf("Hairpin turn get close to : ");
-			printf("%i", Value);
-			printf("\n");
-			printf("\n");
-			break;
-		case 2:
-			printf("Chicane turn get close to : ");
-			printf("%i", Value);
-			printf("\n");
-			printf("\n");
-			break;
-		case 3:
-			printf("Rocks be the lowest");
-			printf("\n");
-			printf("\n");
-			break;
-		}
-		*/
 	}
 	else
 	{
@@ -64,6 +37,7 @@ int Obstacles::GetValue()
 	return Value;
 }
 
+// This resolves the obstacle based off the players and the enemy's gear which it takes in when called
 bool Obstacles::Resolve(int pGear, int oGear)
 {
 	if (CurObs == 0)

@@ -8,6 +8,7 @@ public class StateConc : StateMachineBehaviour
     private GameObject player;
     public override void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
+        // This allows us to get a reference to the player so that we can retrieve the references needed for other behaviors
         manager = GameObject.FindGameObjectWithTag("Manage");
         player = manager.GetComponent<Player_Manager>().GetPlayer();
         player.GetComponent<Player_combat>().SetLight(false);

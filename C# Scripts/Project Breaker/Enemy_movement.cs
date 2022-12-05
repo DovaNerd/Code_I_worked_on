@@ -30,11 +30,11 @@ public class Enemy_movement : MonoBehaviour
         clipInfo = anim.GetCurrentAnimatorClipInfo(0);
     }
 
-    // Update is called once per frame
     void Update()
     {
         clipInfo = anim.GetCurrentAnimatorClipInfo(0);
 
+        // Getting the position of the player
             if (target == null)
             {
                 manager = GameObject.Find("Game_Manager");
@@ -61,8 +61,10 @@ public class Enemy_movement : MonoBehaviour
 
         if (this.tag == "Enemy" || this.tag == "enemy1" || this.tag == "enemy2" || this.tag == "enemy3")
         {
+            // Here we calculate the distance from the player to the enemy
             float distance = Vector3.Distance(target.position, transform.position);
 
+            // If they are in the sight bubble we activate the enemy and set their destination to the players location
             if (distance <= lookRadius || active == true)
             {
                 agent.SetDestination(target.position);
@@ -89,6 +91,7 @@ public class Enemy_movement : MonoBehaviour
 
                     }
                 }
+                // The enemy will attack here if they are within stoping distance to the player and then reset their attack timer
                 else if (attackTime <= 0 || distance >= agent.stoppingDistance + 2f)
                 {
                     if (hitbox.enabled == true)
@@ -100,12 +103,16 @@ public class Enemy_movement : MonoBehaviour
                     attackTime = 3f;
                 }
             }
+            // This is so the enemy faces the player when they are within range
             FaceTarget();
         }
+        // This handles the functionality if the Enemy is of the musket type
         else if (this.tag =="MusketEnemy")
         {
+            // Here we calculate the distance from the player to the enemy
             float distance = Vector3.Distance(target.position, transform.position);
 
+            // Begin walking towards the player if they are within our sight bubble
             if (distance <= lookRadius && anim.GetBool("isAim") == false || active == true && anim.GetBool("isAim") == false)
             {
                 agent.SetDestination(target.position);
@@ -125,15 +132,16 @@ public class Enemy_movement : MonoBehaviour
                 // This is the code that decides when the enemy is supposed to attack
                 if (attackTime > 0 && distance <= agent.stoppingDistance + 4 && anim.GetBool("isShoot") == false)
                 {
+                    // Begin to aim at the player
                     anim.SetBool("isWalking", false);
                     anim.SetBool("isAim", true);
                     attackTime -= Time.deltaTime;
                     indicator.SetActive(true);
+                    // If the enemy is suposed to attack the player
                     if (attackTime <= 2 && attackTime >= 1)
                     {
                         if(smoke != null)
                         smoke.Play();
-
                         anim.SetBool("isShoot", true);
                         anim.SetBool("isReload", true);
                         anim.SetBool("isAim", false);

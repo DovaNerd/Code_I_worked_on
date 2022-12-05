@@ -7,9 +7,10 @@ public class IdleReset : StateMachineBehaviour
     private GameObject manager;
     private GameObject player;
 
-    //This Code uses the players class to determine whether or not the player can even start a heavy or light combo
+    // This Code uses the players class to determine whether or not the player can even start a heavy or light combo
     public override void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
+        // Getting references needed for the behavior
         manager = GameObject.FindGameObjectWithTag("Manage");
         player = manager.GetComponent<Player_Manager>().GetPlayer();
         player.GetComponent<Player_combat>().CombatReset();
@@ -17,7 +18,10 @@ public class IdleReset : StateMachineBehaviour
         if (player.GetComponent<Player_combat>().trail != null)
         player.GetComponent<Player_combat>().trail.enabled = false;
 
+        // Stop the player from moving which can cuase animator issues
         player.GetComponent<Player_movement>().SetStop(false);
+
+        // Setting up what attacks the player has access to in the current state based off what class they are
         switch (player.GetComponent<Player_Stats>().classSelect)
         {
             case 0:
@@ -36,15 +40,4 @@ public class IdleReset : StateMachineBehaviour
                 break;
         }
     }
-
-    //This resets the combat mechanics of the player when they continue the combo it resets the input variable so the player can input another attack as well as resets the hitboxes
-    override public void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
-    {
-        /*
-        manager = GameObject.FindGameObjectWithTag("Manage");
-        player = manager.GetComponent<Player_Manager>().GetPlayer();
-        player.GetComponent<Player_combat>().CombatReset();
-        */
-    }
-    
 }

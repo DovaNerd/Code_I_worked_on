@@ -12,6 +12,7 @@ Cars::~Cars()
 {
 }
 
+// Manual gear changes
 void Cars::ChangeGears(int NewGear)
 {
 	Gear = NewGear;
@@ -157,10 +158,9 @@ void Cars::SetSabo()
 		Sabo = false;
 }
 
+// This functions handles storage of what cards the player currently has selected on the HUD
 void Cars::PlayCard(int Position, int NewGear)
 {
-
-
 	if (Position2 != -6)
 	{
 		if (Position1 == Position)
@@ -216,19 +216,6 @@ void Cars::PlayCard(int Position, int NewGear)
 		}
 	}
 }
-/*
-int Cars::GetAction1()
-{
-}
-
-int Cars::GetAction2()
-{
-}
-
-void Cars::SetAction(int action)
-{
-}
-*/
 
 void Cars::IncreaseScore()
 {
@@ -245,6 +232,7 @@ void Cars::SetOppGear(int gear)
 	Oppgear = gear;
 }
 
+// This resets all the players actions and removes the cards that they played at the end of their turn
 void Cars::ResetTurn()
 {
 	if (Position1 != -1 && Position1 != -3 && Position1 != -2)
@@ -282,7 +270,7 @@ void Cars::ResetTurn()
 	}
 }
 
-
+//This function resolves all the card effects possible in the class based of the card type played for reference to what the card types are refer to the header class
 void Cars::ResolveCards()
 {
 	AudioEngine& audio = AudioEngine::Instance();
@@ -441,7 +429,7 @@ void Cars::SetPosition(int Position)
 {
 	Position2 = Position;
 }
-
+//This function just allows us to add either the players hand or deck
 void Cars::AddCard(int NewCard, bool object)
 {
 	if (object == true)
@@ -461,6 +449,7 @@ void Cars::AddCard(int NewCard, bool object)
 	}
 }
 
+// This let's us remove a card from the players hand or deck
 void Cars::RemoveCard(int Position, bool object)
 {
 	if (object == true)
@@ -473,6 +462,7 @@ void Cars::RemoveCard(int Position, bool object)
 	}
 }
 
+// This returns the card at the position in either the players deck or hand
 int Cars::GetCard(int Position, bool object)
 {
 	if (object == true)
@@ -485,6 +475,7 @@ int Cars::GetCard(int Position, bool object)
 	}
 }
 
+// A function that draws from the players deck
 void Cars::Draw()
 {
 	for (int i = 0; i < Deck.size(); i++)
@@ -498,6 +489,7 @@ void Cars::Draw()
 	}
 }
 
+// A function for shuffling the players deck whenever its called
 void Cars::Shuffle()
 {
 	srand((unsigned)time(0));

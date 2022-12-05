@@ -25,11 +25,6 @@ public class Player_combat : MonoBehaviour
 
     [SerializeField] float cTime = 0.8f;
 
-    /*
-    float cTimeMin = 0.5f; //min you need to watch
-    float cTimeMax = 0.8f; //after this takes you to idle
-    */
-
     int lCombo = 0;
     int hCombo = 0;
 
@@ -47,8 +42,10 @@ public class Player_combat : MonoBehaviour
     void Combo(int attack)
     {
         FMODUnity.RuntimeManager.PlayOneShot(swingSound);
+        // This is if the player clicks the left mouse button and does the action for the light attack and enables any graphical interfaces
         if (attack == 0)
         {
+            // Here we stop the player from moving and make sure the hitboxes is disabled before we flash it to deal the damage
             this.GetComponent<Player_movement>().SetStop(true);
             lHitbox.enabled = false;
             lHitbox.enabled = true;
@@ -56,10 +53,12 @@ public class Player_combat : MonoBehaviour
             if(trail != null)
             trail.enabled = true;
 
+            // Here we are telling the combo system the player has already done an input and should not be able to put in another until reset
             if (lCombo != 0)
             {
                 hasIn = true;
             }
+            // Incrementing the light attack counter and setting it in the unity animator so that it can handle the transition to the appropriate state
             lCombo++;
             anim.SetInteger("lCombo", lCombo);
             if (NetworkingManager.Instance != null)
@@ -67,8 +66,10 @@ public class Player_combat : MonoBehaviour
                 NetworkingManager.Instance.TCPSend(21, "lCombo;" + lCombo);
             }
         }
+        // This is if the player clicks the right mouse button and does the action for the heavy attack and enables any graphical interfaces
         else if (attack == 1)
         {
+            // Here we stop the player from moving and make sure the hitboxes is disabled before we flash it to deal the damage
             this.GetComponent<Player_movement>().SetStop(true);
             hHitbox.enabled = false;
             hHitbox.enabled = true;
@@ -80,6 +81,7 @@ public class Player_combat : MonoBehaviour
             {
                 hasIn = true;
             }
+            // Incrementing the heavy attack counter and setting it in the unity animator so that it can handle the transition to the appropriate state
             hCombo++;
             anim.SetInteger("hCombo", hCombo);
             if (NetworkingManager.Instance != null)
@@ -136,6 +138,7 @@ public class Player_combat : MonoBehaviour
             }
         }
 
+        // This allows players access to the shooting functionality if the class they chose has that mechanic
         if (hDown == true && pClass >= 2 && clipInfo[0].clip.name == "Idle")
         {
             anim.SetBool("isAim", true);
@@ -146,13 +149,14 @@ public class Player_combat : MonoBehaviour
 
             isShoot = true;
         }
+        // This allows players to shoot when they release the right mouse button for the shooting mechanic
         else if (Input.GetMouseButtonUp(1) == true && pClass >= 2 && clipInfo[0].clip.name == "Aim" && anim.GetBool("isShoot") == false)
         {
             RuntimeManager.PlayOneShot(shotSound);
 
             if(smoke != null)
             smoke.Play();
-
+            // Setting the animator variables
             anim.SetBool("isShoot", true);
             anim.SetBool("isReload", true);
             anim.SetBool("isAim", false);
@@ -162,6 +166,7 @@ public class Player_combat : MonoBehaviour
                 NetworkingManager.Instance.TCPSend(20, "isReload;true");
                 NetworkingManager.Instance.TCPSend(20, "isAim;false");
             }
+            // Creatign an instance of the bulllet prefab
             GameObject bullet = Instantiate(bulletPre, firePoint.transform.position, Quaternion.identity);
             Vector3 dir = (this.transform.forward);
             bullet.GetComponentInChildren<Bullet>().Setup(dir, stats.Heavy());
@@ -206,6 +211,7 @@ public class Player_combat : MonoBehaviour
         cTime = 0.8f;
     }
 
+    // This function resets the combo counter when called
     public void ComboReset()
     {
         lCombo = 0;
@@ -214,6 +220,7 @@ public class Player_combat : MonoBehaviour
         anim.SetInteger("lCombo", lCombo);
     }
 
+    // Resets every single variable related to player combat when called
     public void FullCombatReset()
     {
         lCombo = 0;

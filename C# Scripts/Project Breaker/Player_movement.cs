@@ -73,6 +73,7 @@ public class Player_movement : MonoBehaviour
 #else
         move = camToP2DH * Input.GetAxis("Horizontal") + camToP2DV * Input.GetAxis("Vertical");
 #endif
+        // Telling the animator to play the walking animation
         if (Mathf.Abs(move.sqrMagnitude) > 0.1f)
         {
             anim.SetBool("isWalking", true);          
@@ -82,6 +83,7 @@ public class Player_movement : MonoBehaviour
             anim.SetBool("isWalking", false);
         }
 
+        // This creates a raycast from the camera's location to where the mouse is pointing to in the world and then rotates the player to face that direction
         if (stop == false)
         {
             Ray cameraRay = mainCamera.ScreenPointToRay(Input.mousePosition);
@@ -109,6 +111,7 @@ public class Player_movement : MonoBehaviour
                 StartCoroutine(Dash(move.normalized));
             }
         }
+        #region Camera Controls
         if (Input.GetButtonDown("CameraLeft") && !camMoving)
         {
             Transform vCamTrans = vCam.transform;
@@ -138,7 +141,7 @@ public class Player_movement : MonoBehaviour
             }
             camDirDirty = true;
         }
-
+        #endregion
         playerVelocity.y += gravityValue * Time.deltaTime;
         controller.Move(playerVelocity * Time.deltaTime);
 
@@ -150,6 +153,7 @@ public class Player_movement : MonoBehaviour
         mobileStick = newStick.GetComponent<Joystick>();
     }
     
+    // This is a coreroutine function so that players can dash and still play the game
     private IEnumerator Dash(Vector3 dir)
     {
         GameObject particle = GameObject.FindGameObjectWithTag("Dash");

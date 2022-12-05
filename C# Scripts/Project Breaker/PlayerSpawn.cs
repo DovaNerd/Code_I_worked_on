@@ -44,8 +44,7 @@ public class PlayerSpawn : MonoBehaviour
 
         GameObject dash = Instantiate(dashPre, new Vector3(1000f, 1000f, 1000f), Quaternion.identity);
 
-        //mapCam.GetComponent<Camera>().SetReplacementShader(unlit, "RenderType");
-
+        // Setting the refernce in the player manager
         playerManager = GameObject.Find("Game_Manager");
         manager = playerManager.GetComponent<Player_Manager>();
         classSelect = PlayerPrefs.GetInt("PlayerClass");
@@ -93,6 +92,7 @@ public class PlayerSpawn : MonoBehaviour
             }
         }
 
+        // Creating the player prefab based on what class they chose
         switch (classSelect)
         {
             case 0:
@@ -123,15 +123,8 @@ public class PlayerSpawn : MonoBehaviour
 
         cam.GetComponent<CinemachineVirtualCamera>().LookAt = playerRef.transform;
         cam.GetComponent<CinemachineVirtualCamera>().Follow = playerRef.transform;
-        //mapCam.GetComponent<CinemachineVirtualCamera>().LookAt = playerRef.transform;
         mapVCam.GetComponent<CinemachineVirtualCamera>().Follow = playerRef.transform;
         playerManager.GetComponent<Player_Manager>().SetPlayer(playerRef);
         Player_Manager.Instance.startPos = playerRef.transform.position;
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
     }
 }

@@ -118,13 +118,8 @@ void TutorialScene::Start()
 	m_PauseMenu = m_Registry.create();
 
 
-	/*entt::entity morphTest = m_Registry.create();
-	m_Registry.emplace<syre::MorphRenderer>(morphTest);
-	m_Registry.emplace<syre::Texture>(morphTest, "Car2.png");
-	m_Registry.emplace<syre::Transform>(morphTest, glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.f, 0.0f, 0.0f), glm::vec3(1.0f));
-	m_Registry.get<syre::MorphRenderer>(morphTest).AddFrame("morph01.obj");
-	m_Registry.get<syre::MorphRenderer>(morphTest).AddFrame("morph02.obj");
-	*/
+#pragma region Track Objs creation
+
 
 	//track and scenery
 	m_Registry.emplace<syre::Mesh>(Track, "objects/tutorialTrack.obj");
@@ -304,7 +299,7 @@ void TutorialScene::Start()
 	m_Registry.get<syre::TransformList>(swayingTree).SetDefaultSca(glm::vec3(1.0f));
 	//m_Registry.get<syre::TransformList>(swayingTree).AddPos(glm::vec3(-1.0f, -80.0f, 0.0f));
 
-
+#pragma endregion
 
 
 
@@ -312,6 +307,7 @@ void TutorialScene::Start()
 
 	m_Registry.emplace<Obstacles>(m_Obstacle);
 
+#pragma region Player Routing
 
 
 	m_Registry.emplace<Cars>(m_PCar);
@@ -389,6 +385,10 @@ void TutorialScene::Start()
 
 	carPath.SpeedControl();
 
+#pragma endregion
+
+
+#pragma region Enemy routing
 
 	m_Registry.emplace<Cars>(m_enemy);
 	m_Registry.emplace<syre::Mesh>(m_enemy, "objects/Car2.obj");
@@ -464,7 +464,9 @@ void TutorialScene::Start()
 
 	enemyCarPath.SpeedControl();
 
-	//cards
+#pragma endregion
+
+#pragma region Card textures
 
 	m_Registry.emplace<syre::Mesh>(m_Card, "objects/Card.obj");
 	m_Registry.emplace<syre::Transform>(m_Card, glm::vec3(-3.0f, 0.0f, 2.0f), glm::vec3(0.0, 0.0, 0.0), glm::vec3(0.2f));
@@ -487,8 +489,6 @@ void TutorialScene::Start()
 	gearboxTextures.push_back(syre::Texture("images/Pedals_Neutral.png"));
 	gearboxTextures.push_back(syre::Texture("images/Pedals_Gas.png"));
 	gearboxTextures.push_back(syre::Texture("images/Pedals_Brake.png"));
-
-	//accelerometerTexture.push_back(syre::Texture("Accelerometer.png"));
 
 	pGearTextures.push_back(syre::Texture("images/P1.png"));
 	pGearTextures.push_back(syre::Texture("images/P1.png"));
@@ -560,6 +560,8 @@ void TutorialScene::Start()
 	ActionTextures.push_back(syre::Texture("images/A3.png"));
 	ActionTextures.push_back(syre::Texture("images/A4.png"));
 
+#pragma endregion
+
 	flatShader = Shader::Create();
 	flatShader->LoadShaderPartFromFile("flatVert.glsl", GL_VERTEX_SHADER);
 	flatShader->LoadShaderPartFromFile("flatFrag.glsl", GL_FRAGMENT_SHADER);
@@ -616,11 +618,6 @@ void TutorialScene::Start()
 	morphShader->SetUniform("u_Shininess", shininess);
 
 
-	/*flatMorphShader = Shader::Create();
-	flatMorphShader->LoadShaderPartFromFile("flatMorphVert.glsl", GL_VERTEX_SHADER);
-	flatMorphShader->LoadShaderPartFromFile("flatFrag.glsl", GL_FRAGMENT_SHADER);
-	flatMorphShader->Link();*/
-
 	simpleDepthShader = Shader::Create();
 	simpleDepthShader->LoadShaderPartFromFile("shaders/simple_depth_vert.glsl", GL_VERTEX_SHADER);
 	simpleDepthShader->LoadShaderPartFromFile("shaders/simple_depth_frag.glsl", GL_FRAGMENT_SHADER);
@@ -633,6 +630,7 @@ void TutorialScene::Start()
 	camComponent->LookAt(glm::vec3(0.0f)); // Look at center of the screen
 	camComponent->SetFovDegrees(100.0f); // Set an initial FOV
 
+	// Creating the obstacle deck for this stage
 	auto& obstacleComponent = m_Registry.get<Obstacles>(m_Obstacle);
 	obstacleComponent.Adddeck(2);
 	obstacleComponent.Adddeck(2);

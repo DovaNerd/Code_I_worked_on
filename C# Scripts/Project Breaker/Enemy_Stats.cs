@@ -34,10 +34,6 @@ public class Enemy_Stats : MonoBehaviour
 
     void Update()
     {
-       //if (anim.GetBool("isDead") == true && anim.GetCurrentAnimatorStateInfo(0).normalizedTime < 1)
-        //{
-         //   Destroy(this.gameObject);
-        //}
         if (health <= 0)
         {
             anim.SetBool("isDead", true);
@@ -80,12 +76,11 @@ public class Enemy_Stats : MonoBehaviour
         health -= dDealt;
         
         DamNum.instance.SpawnDamNum(transform.position, (float)dDealt);
-        //gameObject.GetComponentInChildren<ParticleSystem>().Play();
-        //currently there is no particle system needs fixed
         anim.SetBool("isDamaged", true);
         return health;
     }
 
+    // This is a duplicate function for when the game is online
     public float NetworkedDamage(int dDealt)
     {
         mr.material.color = Color.red;
@@ -100,13 +95,11 @@ public class Enemy_Stats : MonoBehaviour
         health -= dDealt;
 
         DamNum.instance.SpawnDamNum(transform.position, (float)dDealt);
-        //gameObject.GetComponentInChildren<ParticleSystem>().Play();
-        //currently there is no particle system needs fixed
         anim.SetBool("isDamaged", true);
         return health;
     }
 
-
+    // Causes the enemy to flash when damaged
     void Flashstop()
     {
         mr.material.color = matDef;
@@ -138,6 +131,7 @@ public class Enemy_Stats : MonoBehaviour
     }
     #endregion
 
+    // This handles collisions for the enemy
     private void OnTriggerEnter(Collider col)
     {
         Player_Stats dmg = col.gameObject.GetComponentInParent<Player_Stats>();
