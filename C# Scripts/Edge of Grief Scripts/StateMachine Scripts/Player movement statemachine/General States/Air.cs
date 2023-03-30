@@ -25,9 +25,10 @@ public class Air : BaseState
     public override void UpdateLogic()
     {
         base.UpdateLogic();
+        //Debug.Log(_sm.GetCurrentState());
         if (_grounded)
             stateMachine.ChangeState(_sm.idleState);
-        else if (_sm.dashAction && _sm.dashes == 0)
+        else if (_sm.dashAction)
         {
             stateMachine.ChangeState(_sm.dashingState);
         }
@@ -35,14 +36,20 @@ public class Air : BaseState
         {
             stateMachine.ChangeState(_sm.attackState);
         }
+        else if (_sm.menuAction)
+        {
+            stateMachine.ChangeState(_sm.menuState);
+        }
+        else if (_sm.projectileAction)
+        {
+            stateMachine.ChangeState(_sm.projectileState);
+        }
     }
 
     //This handles the updating of the physics of our gameobject and interactions that should be executed in our current state
     public override void UpdatePhysics()
     {
         base.UpdatePhysics();
-        _sm.AnimationMirror();
-        _sm.Move();
-        _grounded = _sm.characterbody.velocity.y < Mathf.Epsilon && _sm.dCollider.IsTouchingLayers();
+        _grounded = _sm.dCollider.IsTouchingLayers(LayerMask.GetMask("Ground"));
     }
 }

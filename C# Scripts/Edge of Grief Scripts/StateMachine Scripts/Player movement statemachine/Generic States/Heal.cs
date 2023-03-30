@@ -7,6 +7,7 @@ public class Heal : BaseState
 {
     //This is a reference to the statemachine the state is part of
     PlayerSM _sm;
+    Player_Stats _st;
 
     //This is the constructor for the state which assigns the reference to the overall statemachine and then passes the reference to its base state
     public Heal (PlayerSM stateMachine) : base ("Heal", stateMachine)
@@ -18,7 +19,11 @@ public class Heal : BaseState
     public override void Enter()
     {
         base.Enter();
+        _st.heal();
+        _sm.healAction = false;
+        _sm.magicReady = false;
         _sm.anim.SetTrigger("Healing");
+        _sm.MagicCoroutine();
     }
 
     //This update logic function is used for determining whether the current state needs to change and when it should change

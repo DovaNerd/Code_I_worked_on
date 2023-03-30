@@ -2,14 +2,14 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-//This is a generic state its inherits directly from the Air general state
-public class WallJump : Air
+//This is a generic state its inherits directly from base state however does not encapsulate code from other states
+public class Projectile : BaseState
 {
     //This is a reference to the statemachine the state is part of
     PlayerSM _sm;
-
+    
     //This is the constructor for the state which assigns the reference to the overall statemachine and then passes the reference to its base state
-    public WallJump (PlayerSM stateMachine) : base ("WallJump", stateMachine)
+    public Projectile(PlayerSM stateMachine) : base("Heal", stateMachine)
     {
         _sm = stateMachine;
     }
@@ -18,15 +18,22 @@ public class WallJump : Air
     public override void Enter()
     {
         base.Enter();
-        _sm.anim.SetTrigger("Jumping");
-        _sm.characterbody.velocity = Vector2.zero;
-        _sm.characterbody.AddForce(new Vector2(7 * _sm.moveinput.x, 13), ForceMode2D.Impulse);
-        stateMachine.ChangeState(_sm.fallingState);
+        _sm.projectileAction = false;
+        _sm.magicReady = false;
+        _sm.MagicCoroutine();
+        _sm.Projectile();
     }
 
     //This update logic function is used for determining whether the current state needs to change and when it should change
     public override void UpdateLogic()
     {
         base.UpdateLogic();
+        if (_sm.airStates.Contains(_sm.GetPreviousState()))
+            stateMachine.ChangeState(_sm.fallingState);
+        else
+        {
+            stateMachine.ChangeState(_sm.idleState);
+            _sm.anim.SetTrigger("Idle");
+        }
     }
 }

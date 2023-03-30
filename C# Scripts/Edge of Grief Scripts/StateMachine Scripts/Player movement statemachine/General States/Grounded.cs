@@ -25,13 +25,15 @@ public class Grounded : BaseState
     public override void UpdateLogic()
     {
         base.UpdateLogic();
-        if (_sm.jumpAction)
-        {
-            stateMachine.ChangeState(_sm.jumpingState);
-        }
-        else if (_sm.dashAction)
+        //Debug.Log(_sm.GetCurrentState());
+        
+        if (_sm.dashAction)
         {
             stateMachine.ChangeState(_sm.dashingState);
+        }
+        else if (_sm.jumpAction)
+        {
+            stateMachine.ChangeState(_sm.jumpingState);
         }
         else if (_sm.attackAction)
         {
@@ -44,6 +46,14 @@ public class Grounded : BaseState
         else if (_sm.healAction)
         {
             stateMachine.ChangeState(_sm.healState);
+        }
+        else if (_sm.menuAction)
+        {
+            stateMachine.ChangeState(_sm.menuState);
+        }
+        else if (!_sm.dCollider.IsTouchingLayers(LayerMask.GetMask("Wall", "Ground")))
+        {
+            stateMachine.ChangeState(_sm.fallingState);
         }
     }
 

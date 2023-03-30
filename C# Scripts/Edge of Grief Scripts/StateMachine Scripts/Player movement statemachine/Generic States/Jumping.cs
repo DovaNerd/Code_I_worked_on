@@ -18,28 +18,40 @@ public class Jumping : Air
     public override void Enter()
     {
         base.Enter();
-        _sm.anim.SetTrigger("Jumping");
         _sm.Jump();
+        _sm.AnimationPlay("Jumping");
     }
 
     //This update logic function is used for determining whether the current state needs to change and when it should change
     public override void UpdateLogic()
     {
         base.UpdateLogic();
-        if (Crest())
+        if (Crest() || !_sm.jumpAction)
             stateMachine.ChangeState(_sm.fallingState);
+        else if (WallTouch())
+            stateMachine.ChangeState(_sm.wallslideState);
     }
 
     //This handles the updating of the physics of our gameobject and interactions that should be executed in our current state
     public override void UpdatePhysics()
     {
         base.UpdatePhysics();
+        _sm.AnimationMirror();
+        _sm.Move();
     }
 
     //We use this function to determine whether or not the player has begun going down in the jump
     private bool Crest()
     {
-        if (_sm.characterbody.velocity.y < 0)
+        if (_sm.characterRigidbody.velocity.y < 0)
+            return true;
+        else
+            return false;
+    }
+
+    private bool WallTouch()
+    {
+        if (_sm.lCollider.IsTouchingLayers(LayerMask.GetMask("Wall")) || _sm.rCollider.IsTouchingLayers(LayerMask.GetMask("Wall")))
             return true;
         else
             return false;

@@ -4,13 +4,13 @@ using UnityEngine.InputSystem;
 using UnityEngine;
 
 //This is a generic state its inherits directly from the grounded general state
-public class Moving : Grounded
+public class Idle : Grounded
 {
     //This is a reference to the statemachine the state is part of
     private PlayerSM _sm;
 
     //This is the constructor for the state which assigns the reference to the overall statemachine and then passes the reference to its base state
-    public Moving(PlayerSM stateMachine) : base("Moving", stateMachine)
+    public Idle(PlayerSM stateMachine) : base("Idle", stateMachine)
     {
         _sm = stateMachine;
     }
@@ -19,23 +19,26 @@ public class Moving : Grounded
     public override void Enter()
     {
         base.Enter();
-        _sm.anim.SetTrigger("Moving");
+        if (_sm.GetPreviousState() != null && _sm.GetPreviousState().GetType() != typeof(Attack))
+            _sm.AnimationPlay("Idle");
+
+        _sm.healAction = false;
+        _sm.projectileAction = false;
+
     }
 
     //This update logic function is used for determining whether the current state needs to change and when it should change
     public override void UpdateLogic()
     {
         base.UpdateLogic();
-        if (_sm.moveinput.x == 0)
+        if (_sm.moveinput.x != 0)
         {
-            stateMachine.ChangeState(_sm.idleState);
+            stateMachine.ChangeState(_sm.movingState);
         }
     }
 
-    //This handles the updating of the physics of our gameobject and interactions that should be executed in our current state
-    public override void UpdatePhysics()
+    public override void Exit()
     {
-        base.UpdatePhysics();
-        _sm.Move();
+        base.Exit();
     }
 }

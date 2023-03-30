@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using static UnityEngine.RuleTile.TilingRuleOutput;
 
 public class Dashing : BaseState
 {
@@ -20,10 +21,18 @@ public class Dashing : BaseState
     public override void Enter()
     {
         base.Enter();
-        _sm.AnimationMirror();
-        _sm.dashes += 1;
-        _sm.anim.SetTrigger("Dashing");
+        _sm.dashed = false;//hasnt dashed yet(needed for bug fix)
+        _sm.dashReady = false; ///fix where variables are reset
+        _sm.dashAction = false;
         _sm.DashCoroutine();
+        Physics2D.IgnoreLayerCollision(7, 3, true);
+        _sm.AnimationMirror();
+        _sm.AnimationPlay("Dashing");
+        AfterImagePool.Instance.GetFromPool(); // Getting a reference to an after image object from the object pool
+        _sm.lastImageXpos = _sm.transform.position.x;
+        if (_sm.playerStats.GetDashUpgrade())
+            _sm.dashCol.enabled = true;
+    
     }
 
     //This update logic function is used for determining whether the current state needs to change and when it should change
@@ -33,10 +42,16 @@ public class Dashing : BaseState
 
         if (_sm.dashed == true)
         {
-            if (_sm.airStates.Contains(_sm.GetPreviousState()))
-                stateMachine.ChangeState(_sm.fallingState);
-            if (_sm.groundedStates.Contains(_sm.GetPreviousState()) && _grounded)
+            _sm.dashCol.enabled = false;
+            if (_grounded)
+            {
                 stateMachine.ChangeState(_sm.idleState);
+            }
+            else
+            {
+                stateMachine.ChangeState(_sm.fallingState);
+            }
+                
         }
         
     }
@@ -45,6 +60,12 @@ public class Dashing : BaseState
     public override void UpdatePhysics()
     {
         base.UpdatePhysics();
-        _grounded = _sm.characterbody.velocity.y < Mathf.Epsilon && _sm.dCollider.IsTouchingLayers();
+        _grounded = _sm.characterRigidbody.velocity.y < Mathf.Epsilon && _sm.dCollider.IsTouchingLayers(LayerMask.GetMask("Ground"));
+    }
+
+    public override void Exit()
+    {
+        base.Exit();
+        Physics2D.IgnoreLayerCollision(7, 3, false);
     }
 }
